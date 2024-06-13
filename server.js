@@ -1,10 +1,14 @@
 import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 const app = express();
-app.use(express.json());
+
+app.use(bodyParser.json());
+app.use(cors());
 
 app.post("/inscritos", async (req, res) => {
   await prisma.inscrito.create({
@@ -72,4 +76,7 @@ app.delete("/inscritos/:id", async (req, res) => {
   res.status(200).json({ message: "Usuário deletado com sucesso!" });
 });
 
-app.listen(3000);
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
